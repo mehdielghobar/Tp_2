@@ -1,7 +1,7 @@
-# ============================================================
+
 # TP 2 — Régression Linéaire & Logistique
 # Datasets : auto-mpg.csv  |  binary.csv
-# ============================================================
+
  
 import pandas as pd
 import numpy as np
@@ -18,14 +18,14 @@ from sklearn.metrics import (
 import warnings
 warnings.filterwarnings('ignore')
  
-# ============================================================
+
 # PARTIE 1 — RÉGRESSION LINÉAIRE  (auto-mpg.csv)
-# ============================================================
+
 print("=" * 60)
 print("PARTIE 1 : RÉGRESSION LINÉAIRE — auto-mpg")
 print("=" * 60)
  
-# ----- 1.1 Chargement et exploration -----
+#  1.1 Chargement et exploration 
 df = pd.read_csv("auto-mpg.csv", na_values="?")
 print("\n--- Aperçu ---")
 print(df.head())
@@ -36,7 +36,7 @@ print(df.describe())
 print("\n--- Valeurs manquantes ---")
 print(df.isnull().sum())
  
-# ----- 1.2 Prétraitement -----
+#  1.2 Prétraitement 
 # Suppression de la colonne 'car name' (non numérique)
 df.drop(columns=["car name"], inplace=True, errors="ignore")
  
@@ -49,7 +49,7 @@ df.dropna(inplace=True)
  
 print(f"\nDimensions après nettoyage : {df.shape}")
  
-# ----- 1.3 Visualisations -----
+#  1.3 Visualisations 
 plt.figure(figsize=(12, 5))
  
 plt.subplot(1, 2, 1)
@@ -66,7 +66,7 @@ plt.savefig("correlation_autoMpg.png", dpi=100)
 plt.show()
 print("→ Figure sauvegardée : correlation_autoMpg.png")
  
-# ----- 1.4 Séparation features / cible -----
+#  1.4 Séparation features / cible 
 X = df.drop(columns=["mpg"])
 y = df["mpg"]
  
@@ -79,11 +79,11 @@ scaler = StandardScaler()
 X_train_sc = scaler.fit_transform(X_train)
 X_test_sc  = scaler.transform(X_test)
  
-# ----- 1.5 Entraînement -----
+#  1.5 Entraînement 
 model_lr = LinearRegression()
 model_lr.fit(X_train_sc, y_train)
  
-# ----- 1.6 Évaluation -----
+#  1.6 Évaluation 
 y_pred = model_lr.predict(X_test_sc)
 mse  = mean_squared_error(y_test, y_pred)
 rmse = np.sqrt(mse)
@@ -102,7 +102,7 @@ coeff_df = pd.DataFrame({
 print("\n--- Coefficients ---")
 print(coeff_df.to_string(index=False))
  
-# ----- 1.7 Graphique prédictions vs réelles -----
+#  1.7 Graphique prédictions vs réelles 
 plt.figure(figsize=(6, 5))
 plt.scatter(y_test, y_pred, alpha=0.6, color="steelblue")
 plt.plot([y_test.min(), y_test.max()],
@@ -116,14 +116,14 @@ plt.show()
 print("→ Figure sauvegardée : pred_vs_real_mpg.png")
  
  
-# ============================================================
+
 # PARTIE 2 — RÉGRESSION LOGISTIQUE  (binary.csv)
-# ============================================================
+
 print("\n" + "=" * 60)
 print("PARTIE 2 : RÉGRESSION LOGISTIQUE — binary")
 print("=" * 60)
  
-# ----- 2.1 Chargement et exploration -----
+#  2.1 Chargement et exploration 
 df2 = pd.read_csv("binary.csv")
 print("\n--- Aperçu ---")
 print(df2.head())
@@ -133,7 +133,7 @@ print("\n--- Distribution de la cible ---")
 print(df2["admit"].value_counts())
 print(df2["admit"].value_counts(normalize=True).round(3))
  
-# ----- 2.2 Visualisation -----
+#  2.2 Visualisation 
 plt.figure(figsize=(12, 4))
  
 plt.subplot(1, 3, 1)
@@ -153,7 +153,7 @@ plt.savefig("eda_binary.png", dpi=100)
 plt.show()
 print("→ Figure sauvegardée : eda_binary.png")
  
-# ----- 2.3 Prétraitement -----
+#  2.3 Prétraitement
 df2.dropna(inplace=True)
  
 X2 = df2.drop(columns=["admit"])
@@ -167,11 +167,11 @@ scaler2 = StandardScaler()
 X2_train_sc = scaler2.fit_transform(X2_train)
 X2_test_sc  = scaler2.transform(X2_test)
  
-# ----- 2.4 Entraînement -----
+# - 2.4 Entraînement 
 model_log = LogisticRegression(random_state=42, max_iter=1000)
 model_log.fit(X2_train_sc, y2_train)
  
-# ----- 2.5 Évaluation -----
+#  2.5 Évaluation 
 y2_pred      = model_log.predict(X2_test_sc)
 y2_pred_prob = model_log.predict_proba(X2_test_sc)[:, 1]
  
